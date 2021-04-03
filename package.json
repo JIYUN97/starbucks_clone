@@ -1,0 +1,24 @@
+{
+  "name": "starbucks_clone",
+  "version": "1.0.0",
+  "description": "스타벅스 어플리케이션 클론",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JIYUN97/starbucks_clone.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JIYUN97/starbucks_clone/issues"
+  },
+  "homepage": "https://github.com/JIYUN97/starbucks_clone#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.12.3"
+  }
+}
