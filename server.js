@@ -7,7 +7,7 @@ const { menuRouter } = require("./routers/menuRouter");
 
 const server = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/menu", {
+    await mongoose.connect("mongodb://localhost:27017/starbucks", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,

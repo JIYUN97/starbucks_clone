@@ -65,8 +65,44 @@ for url in detail_url:
             eng_name = drinks[0].findAll("div", {"class": re.compile("myAssignZone")})[0].findAll("h4")[0].findAll('span')[0].text
             name = drinks[0].findAll("div", {"class": re.compile("myAssignZone")})[0].findAll("h4")[0].text.replace(eng_name,'')
             description = drinks[0].findAll("p", {"class": re.compile("t1")})[0].text
-            price = 5600
-            eng_category = "추후직접수정해야함"
+            
+            # price
+            def menu_price(idx):
+                dict_menu = {
+                        "2021 CherryBlossom":6100,
+                        "웹사이트 비노출 메뉴(사이렌오더 영양정보 연동)":5600,
+                        "콜드 브루":5800,
+                        "에스프레소":5100,
+                        "프라푸치노":6100,
+                        "블렌디드":6300,
+                        "스타벅스 피지오":5900,
+                        "티":5800,
+                        "기타 제조 음료":5900
+                }
+                return dict_menu[idx]
+                
+            price = menu_price(category)
+
+            # eng_category 작업
+            
+            
+            def switch_eng_menu(idx):
+                dict_menu = {
+                        "2021 CherryBlossom":"Recommend",
+                        "웹사이트 비노출 메뉴(사이렌오더 영양정보 연동)":"None",
+                        "콜드 브루":"Cold Brew",
+                        "에스프레소":"Espresso",
+                        "프라푸치노":"Frappuccino",
+                        "블렌디드":"Blended",
+                        "스타벅스 피지오":"Starvbucks Fizzio",
+                        "티":"Teavana",
+                        "기타 제조 음료":"Others"
+                }
+                return dict_menu[idx]
+
+            eng_category = switch_eng_menu(category)
+
+
             # 영양소가 1차원 배열인데 텍스트로 수정..할지말지 추후 상의
             # 1차원 배열이었는데 ","를 기준으로 나뉘는 str타입으로 변경했습니다
             nutrition = str([x.text for x in drinks[0]("dd")][:8])[1:-1]
@@ -94,7 +130,7 @@ for url in detail_url:
             except IndexError: allergy = "none"
 
             doc = {"menu":menu,"category":category,"eng_name":eng_name,"name":name
-                ,"description":description,"price":5600,"eng_category":"추후수정할예정"
+                ,"description":description,"price":price,"eng_category":eng_category
                 ,"nutrition":nutrition,"image":image,"allergy":allergy,
                 "hot":hot,"ice":ice}
             db.menus.insert_one(doc)
