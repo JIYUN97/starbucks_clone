@@ -1,6 +1,6 @@
-const express = require("express");
-const app = express();
-const port = 3000;
-const cors = require("cors");
-const mongoose = require("mongoose");
-const { menuRouter } = require("./routers/menuRouter");
+// const express = require("express");
+// const menuRouter = express.Router();
+// const { Category } = require("../schemas/Category");
+const { Menu } = require("../schemas/Menu");
+
+console.log(Menu.find({category: "2021 CherryBlossom"}));
