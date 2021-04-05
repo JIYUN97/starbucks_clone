@@ -45,56 +45,60 @@ for drink in drinks:
 
 # 각 url당 상세정보를 for문을 돌리기
 for url in detail_url:
-    driver = webdriver.Chrome(ChromeDriverManager().install())
-    driver.get(url)
+    try:
+            driver = webdriver.Chrome(ChromeDriverManager().install())
+            driver.get(url)
 
-    html = driver.page_source
-    soup = BeautifulSoup(html, 'html.parser')
-    drinks = soup.findAll("div", {"class": re.compile("content02")})
+            html = driver.page_source
+            soup = BeautifulSoup(html, 'html.parser')
+            drinks = soup.findAll("div", {"class": re.compile("content02")})
 
-    # 데이터 삽입
-    #큰카테고리
-    menu = "음료"
+            # 데이터 삽입
+            #큰카테고리
+            menu = "음료"
 
-    # 중간카테고리
-    a = soup.findAll("div", {"class": re.compile("sub_tit_inner")})
-    category = a[0].findAll('a', {"class": re.compile("cate")})[0].text
+            # 중간카테고리
+            a = soup.findAll("div", {"class": re.compile("sub_tit_inner")})
+            category = a[0].findAll('a', {"class": re.compile("cate")})[0].text
 
-    # 디테일
-    eng_name = drinks[0].findAll("div", {"class": re.compile("myAssignZone")})[0].findAll("h4")[0].findAll('span')[0].text
-    name = drinks[0].findAll("div", {"class": re.compile("myAssignZone")})[0].findAll("h4")[0].text.replace(eng_name,'')
-    description = drinks[0].findAll("p", {"class": re.compile("t1")})[0].text
-    price = 5600
-    eng_category = "추후직접수정해야함"
-    # 영양소가 1차원 배열인데 텍스트로 수정..할지말지 추후 상의
-    # 1차원 배열이었는데 ","를 기준으로 나뉘는 str타입으로 변경했습니다
-    nutrition = str([x.text for x in drinks[0]("dd")][:8])[1:-1]
-    image = drinks[0].findAll("img", {"class": re.compile("zoomImg")})[0]['src']
+            # 디테일
+            eng_name = drinks[0].findAll("div", {"class": re.compile("myAssignZone")})[0].findAll("h4")[0].findAll('span')[0].text
+            name = drinks[0].findAll("div", {"class": re.compile("myAssignZone")})[0].findAll("h4")[0].text.replace(eng_name,'')
+            description = drinks[0].findAll("p", {"class": re.compile("t1")})[0].text
+            price = 5600
+            eng_category = "추후직접수정해야함"
+            # 영양소가 1차원 배열인데 텍스트로 수정..할지말지 추후 상의
+            # 1차원 배열이었는데 ","를 기준으로 나뉘는 str타입으로 변경했습니다
+            nutrition = str([x.text for x in drinks[0]("dd")][:8])[1:-1]
+            image = drinks[0].findAll("img", {"class": re.compile("zoomImg")})[0]['src']
 
-    
-    # hot / ice 구분을 위한 리스트
-    default_ice = ["콜드 브루","프라푸치노","스타벅스 피지오"]
+            
+            # hot / ice 구분을 위한 리스트
+            default_ice = ["콜드 브루","프라푸치노","스타벅스 피지오"]
 
-    # hot 과 ice를 나누어주는 조건문
-    if category in default_ice:
-        hot = False
-        ice = True
-    elif "아이스" in name:
-        hot = False
-        ice = True
-    else:
-        hot = True
-        ice = False
+            # hot 과 ice를 나누어주는 조건문
+            if category in default_ice:
+                hot = False
+                ice = True
+            elif "아이스" in name:
+                hot = False
+                ice = True
+            else:
+                hot = True
+                ice = False
 
-    # 알러지 조건문
-    # 알러지가 없는 경우엔 그냥 값을 안넣어줄까하다가 그냥 none으로 넣는게 나을것같아서..
-    try: 
-        allergy = drinks[0].findAll("div", {"class": re.compile("product_factor")})[0].findAll("p")[0].text.split(":")[1]
-    except IndexError: allergy = "none"
+            # 알러지 조건문
+            # 알러지가 없는 경우엔 그냥 값을 안넣어줄까하다가 그냥 none으로 넣는게 나을것같아서..
+            try: 
+                allergy = drinks[0].findAll("div", {"class": re.compile("product_factor")})[0].findAll("p")[0].text.split(":")[1]
+            except IndexError: allergy = "none"
 
-    doc = {"menu":menu,"category":category,"eng_name":eng_name,"name":name
-        ,"description":description,"price":5600,"eng_category":"추후수정할예정"
-        ,"nutrition":nutrition,"image":image,"allergy":allergy,
-        "hot":hot,"ice":ice}
-    db.menu.insert_one(doc)
+            doc = {"menu":menu,"category":category,"eng_name":eng_name,"name":name
+                ,"description":description,"price":5600,"eng_category":"추후수정할예정"
+                ,"nutrition":nutrition,"image":image,"allergy":allergy,
+                "hot":hot,"ice":ice}
+            db.menu.insert_one(doc)
+    except:
+        print("에러확인!!!!!!!!!")
+
     # print("menu:",menu,"\ncategory:",category,"\nname:",name,"\neng_name:",eng_name,"\ndescription:",description,"\nimage:",image,"\nnutrition:",nutrition,"\nallergy:",allergy,"\nice:",ice,"\nhot:",hot)
