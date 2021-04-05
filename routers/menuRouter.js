@@ -47,6 +47,19 @@ menuRouter.post("/", async (req, res) => {
   res.send("성공");
 });
 
+//새로나온 메뉴
+menuRouter.get("/new_menu", async (req, res) => {
+  try {
+    let { menuId } = req.params;
+    let result = await Menu.findOne({ _id: menuId });
+    return res.send({ result });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ err: err.message });
+  }
+});
+
+
 module.exports = {
   menuRouter,
 };

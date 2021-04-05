@@ -61,6 +61,9 @@ for url in detail_url:
             a = soup.findAll("div", {"class": re.compile("sub_tit_inner")})
             category = a[0].findAll('a', {"class": re.compile("cate")})[0].text
 
+            if category == "웹사이트 비노출 메뉴(사이렌오더 영양정보 연동)":
+                category= "추천"
+
             # 디테일
             eng_name = drinks[0].findAll("div", {"class": re.compile("myAssignZone")})[0].findAll("h4")[0].findAll('span')[0].text
             name = drinks[0].findAll("div", {"class": re.compile("myAssignZone")})[0].findAll("h4")[0].text.replace(eng_name,'')
@@ -70,7 +73,7 @@ for url in detail_url:
             def menu_price(idx):
                 dict_menu = {
                         "2021 CherryBlossom":6100,
-                        "웹사이트 비노출 메뉴(사이렌오더 영양정보 연동)":5600,
+                        "추천":5600,
                         "콜드 브루":5800,
                         "에스프레소":5100,
                         "프라푸치노":6100,
@@ -88,8 +91,8 @@ for url in detail_url:
             
             def switch_eng_menu(idx):
                 dict_menu = {
-                        "2021 CherryBlossom":"Recommend",
-                        "웹사이트 비노출 메뉴(사이렌오더 영양정보 연동)":"None",
+                        "2021 CherryBlossom":"New",
+                        "추천":"Recommend",
                         "콜드 브루":"Cold Brew",
                         "에스프레소":"Espresso",
                         "프라푸치노":"Frappuccino",
