@@ -12,7 +12,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 
 client = MongoClient('localhost', 27017)  # mongoDB는 27017 포트로 돌아갑니다.
-db = client.menu    # 'menu'라는 이름의 db를 사용합니다. 'dbsparta' db가 없다면 새로 만듭니다.
+db = client.starbucks    # 'menu'라는 이름의 db를 사용합니다. 'menu' db가 없다면 새로 만듭니다.
 
 # 보니까 메뉴끼리 URL에 통일성이 없음.. 큰틀에서 한번 URL만 싹 모아오고.. 그리고
 
@@ -97,7 +97,7 @@ for url in detail_url:
                 ,"description":description,"price":5600,"eng_category":"추후수정할예정"
                 ,"nutrition":nutrition,"image":image,"allergy":allergy,
                 "hot":hot,"ice":ice}
-            db.menu.insert_one(doc)
+            db.menus.insert_one(doc)
     except:
         print("에러확인!!!!!!!!!")
 
