@@ -28,8 +28,13 @@ url = ["https://www.starbucks.co.kr/menu/drink_list.do?CATE_CD=product_cold_brew
 url_name = ["콜드브루","브루드커피","에스프레소","프라푸치노","블렌디드","스타벅스피지오","티","기타제조음료","스타벅스주스(병음료)"]
 
 #########################
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument('--headless')
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--disable-dev-shm-usage')
 
-driver = webdriver.Chrome(ChromeDriverManager().install())
+driver = webdriver.Chrome('./chromdriver')
+
 driver.get(url[1])
 
 html = driver.page_source
@@ -46,7 +51,7 @@ for drink in drinks:
 # 각 url당 상세정보를 for문을 돌리기
 for url in detail_url:
     try:
-            driver = webdriver.Chrome(ChromeDriverManager().install())
+            driver = webdriver.Chrome('./chromdriver')
             driver.get(url)
 
             html = driver.page_source
