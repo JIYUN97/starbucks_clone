@@ -50,7 +50,7 @@ menuRouter.post("/", async (req, res) => {
 //새로나온 메뉴
 menuRouter.get("/new_menu", async (req, res) => {
   try {
-    let result = await Menu.find({category: "2021 CherryBlossom"});
+    let result = await Menu.find({ category: "2021 CherryBlossom" });
     return res.send({ result });
   } catch (err) {
     console.log(err);
