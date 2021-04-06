@@ -14,6 +14,8 @@ const server = async () => {
       useCreateIndex: true,
       ignoreUndefined: true,
       useFindAndModify: false,
+      // user: "test",
+      // pass: "test",
     });
 
     app.use(cors()); //cors를 위한 미들웨어
