@@ -8,12 +8,14 @@ const { userRouter } = require("./routers/userRouter");
 
 const server = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/starbucks", {
+    await mongoose.connect("mongodb://localhost:27017/admin", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
       ignoreUndefined: true,
       useFindAndModify: false,
+      user: "test",
+      pass: "test",
     });
 
     app.use(cors()); //cors를 위한 미들웨어
