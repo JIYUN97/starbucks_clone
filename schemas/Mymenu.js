@@ -22,5 +22,5 @@ const MymenuSchema = new Schema({
 });
 
 
-const User = model("mymenu", MymenuSchema);
+const Mymenu = model("mymenu", MymenuSchema);
 module.exports = { Mymenu };

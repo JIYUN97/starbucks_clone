@@ -17,7 +17,7 @@ const UserHistorySchema = new Schema({
         type: Number,
     },
     date: {
-        type: date,
+        type: Date,
         default: Date.now
     },
     size: {
@@ -32,5 +32,5 @@ const UserHistorySchema = new Schema({
     },
 });
 
-const User = model("user", UserHistorySchema);
-module.exports = { User };
+const UserHistory = model("userhistory", UserHistorySchema);
+module.exports = { UserHistory };

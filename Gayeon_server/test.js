@@ -1,7 +1,10 @@
 const express = require("express");
 const menuRouter = express.Router();
+const jwt = require("jsonwebtoken");
 const { Category } = require("../schemas/Category");
 const { Menu } = require("../schemas/Menu");
+const { Mymenu } = require("../schemas/Mymenu");
+const { UserHistory } = require("../schemas/UserHistory");
 const { User } = require("../schemas/User");
 
 //회원가입, 서버에서 비밀번호 - 비밀번호 확인까지 해주는 버전
@@ -33,4 +36,15 @@ menuRouter.get("/signin", async (req, res) => {
     res.status(201).send({});
 });
 
-// 로그인
+// 인기메뉴
+
+
+menuRouter.get("/popular_menu", async (req, res) => {
+    try {
+      let result = await UserHistory.find({});
+      return res.send({ result });
+    } catch (err) {
+      console.log(err);
+      res.status(500).send({ err: err.message });
+    }
+});

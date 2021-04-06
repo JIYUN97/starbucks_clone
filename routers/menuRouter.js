@@ -1,7 +1,11 @@
 const express = require("express");
 const menuRouter = express.Router();
+const jwt = require("jsonwebtoken");
 const { Category } = require("../schemas/Category");
 const { Menu } = require("../schemas/Menu");
+const { Mymenu } = require("../schemas/Mymenu");
+const { UserHistory } = require("../schemas/UserHistory");
+const { User } = require("../schemas/User");
 
 //전체메뉴에서 음료 api
 menuRouter.get("/drink", async (req, res) => {
@@ -58,7 +62,16 @@ menuRouter.get("/new_menu", async (req, res) => {
   }
 });
 
-
+// 인기메뉴
+menuRouter.get("/popular_menu", async (req, res) => {
+  try {
+    let result = await UserHistory.find({});
+    return res.send({ result });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ err: err.message });
+  }
+});
 
 module.exports = {
   menuRouter,
