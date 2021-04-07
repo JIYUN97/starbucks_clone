@@ -55,7 +55,9 @@ userRouter.get("/user_info", authMiddleware, async (req, res) => {
   const userId = res.locals.user;
   try {
     const user = await User.findOne({ id: userId });
-    res.send({ result: { userId: user.id, nickName: user.nickName } });
+    res.send({
+      result: { userId: user.id, nickName: user.nickName, star: user.star },
+    });
   } catch (err) {
     return res.send(400).send({ err: err.message });
   }
