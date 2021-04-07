@@ -9,13 +9,12 @@ const { User } = require("../schemas/User");
 
 //회원가입, 서버에서 비밀번호 - 비밀번호 확인까지 해주는 버전
 userRouter.post("/register", async (req, res) => {
-  const { nickName, id, password, confirmPassword } = req.body;
+  const { nickName, id, password } = req.body;
   try {
-    if (password !== confirmPassword) {
-      res.status(400).send({
-        errorMessage: "패스워드가 패스워드 확인란과 동일하지 않습니다.",
-      });
-      return;
+    if (!nickName || !id || !password) {
+      return res
+        .status(400)
+        .send({ err: "아이디, 패스워드, 닉네임 중 빈 항목이 있습니다." });
     }
 
     const existUsers = await User.find({ $or: [{ id }] });
@@ -26,12 +25,10 @@ userRouter.post("/register", async (req, res) => {
       return;
     }
     User.create({ nickName, id, password });
-
-    res.status(201).send({ result: "success" });
+    return res.status(201).send({ result: "success" });
   } catch (error) {
-    res.status(400).send({ result: "회원가입에 실패했습니다." });
+    return res.status(400).send({ err: "회원가입에 실패했습니다." });
   }
-
 });
 
 //로그인 JWT 토큰 이용
@@ -50,6 +47,11 @@ userRouter.post("/login", async (req, res) => {
     console.log(err);
     return res.status(400).send({ err: err.message });
   }
+});
+
+//로그인 JWT 토큰 이용
+userRouter.post("/logout", async (req, res) => {
+  
 });
 
 module.exports = {

@@ -5,6 +5,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const { menuRouter } = require("./routers/menuRouter");
 const { userRouter } = require("./routers/userRouter");
+const { orderRouter } = require("./routers/orderRouter");
 
 const server = async () => {
   try {
@@ -22,6 +23,7 @@ const server = async () => {
     app.use(express.json());
     app.use("/menu", [menuRouter]);
     app.use("/user", [userRouter]);
+    app.use("/order", [orderRouter]);
 
     app.listen(port, () => {
       console.log("server listening on port 3000");
