@@ -19,7 +19,7 @@ userRouter.post("/register", async (req, res) => {
     const existUsers = await User.find({ $or: [{ id }] });
     if (existUsers.length) {
       res.status(400).send({
-        errorMessage: "이미 가입된 아이디가 있습니다.",
+        err: "이미 가입된 아이디가 있습니다.",
       });
       return;
     }
@@ -46,11 +46,6 @@ userRouter.post("/login", async (req, res) => {
     console.log(err);
     return res.status(400).send({ err: err.message });
   }
-});
-
-//로그인 JWT 토큰 이용
-userRouter.post("/logout", async (req, res) => {
-  
 });
 
 module.exports = {
