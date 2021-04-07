@@ -65,10 +65,14 @@ menuRouter.get("/new_menu", async (req, res) => {
 // 인기메뉴
 menuRouter.get("/popular_menu", async (req, res) => {
   try {
-    let popular_menu = await UserHistory.find({})
+    let recent_history = await UserHistory.find({})
       .populate([{ path: "menu" }])
       .sort("-date")
       .limit(5);
+    let popular_menu = [];
+    recent_history.forEach(function (e) {
+      popular_menu.push(e.menu);
+    });
     res.send({ result: popular_menu });
   } catch (error) {
     res.status(400).send({ err: err.message });
