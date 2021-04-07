@@ -7,6 +7,7 @@ const { Mymenu } = require("../schemas/Mymenu");
 const { UserHistory } = require("../schemas/UserHistory");
 const { User } = require("../schemas/User");
 
+
 //회원가입, 서버에서 비밀번호 - 비밀번호 확인까지 해주는 버전
 userRouter.post("/register", async (req, res) => {
   const { nickName, id, password } = req.body;

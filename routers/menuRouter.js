@@ -64,10 +64,13 @@ menuRouter.get("/new_menu", async (req, res) => {
 
 // 인기메뉴
 menuRouter.get("/popular_menu", async (req, res) => {
-  let popular = await UserHistory.find({}).sort("-date").limit(5);
-  res.send({popular})
+  try {
+    let popular = await UserHistory.find({}).sort("-date").limit(5);
+    res.send({ popular })
+  } catch (error) {
+    res.send({mss:"history does not exist"})
+  }
 });
-
 
 
 module.exports = {
