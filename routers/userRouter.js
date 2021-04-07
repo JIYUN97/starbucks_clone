@@ -16,7 +16,6 @@ userRouter.post("/register", async (req, res) => {
         .status(400)
         .send({ err: "아이디, 패스워드, 닉네임 중 빈 항목이 있습니다." });
     }
-
     const existUsers = await User.find({ $or: [{ id }] });
     if (existUsers.length) {
       res.status(400).send({
