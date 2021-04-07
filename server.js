@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const { menuRouter } = require("./routers/menuRouter");
 const { userRouter } = require("./routers/userRouter");
 const { orderRouter } = require("./routers/orderRouter");
+const authMiddleware = require("./middlewares/auth-middleware");
 
 const server = async () => {
   try {
@@ -23,7 +24,7 @@ const server = async () => {
     app.use(express.json());
     app.use("/menu", [menuRouter]);
     app.use("/user", [userRouter]);
-    app.use("/order", [orderRouter]);
+    app.use("/order", authMiddleware, [orderRouter]);
 
     app.listen(port, () => {
       console.log("server listening on port 3000");

@@ -7,12 +7,24 @@ const { Mymenu } = require("../schemas/Mymenu");
 const { UserHistory } = require("../schemas/UserHistory");
 const { User } = require("../schemas/User");
 
-// 주문하기 > 결제페이지
-orderRouter.post("/",async(req,res)=>{
-    const{user,}= req.body;
+//바로 주문
+orderRouter.post("/", async (req, res) => {
+  const userId = res.locals.user;
+  const { menuId, size, cup_option, num } = req.body;
+  try {
+    const [user, menu] = await Promise.all([
+      User.findOne({ id: userId }),
+      Menu.findById(menuId),
+    ]);
+    const newHistory = new UserHistory({ user, menu, size, cup_option, num });
+    await newHistory.save();
+    return res.send({ result: "success" });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send({ err: err.message });
+  }
 });
 
-
 module.exports = {
-    orderRouter,
+  orderRouter,
 };
