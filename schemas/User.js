@@ -15,6 +15,7 @@ const UserSchema = new Schema({
   },
   star: {
     type: Number,
+    default:0
   },
 });
 

@@ -48,3 +48,13 @@ menuRouter.get("/popular_menu", async (req, res) => {
       res.status(500).send({ err: err.message });
     }
 });
+
+
+// 임의 API
+menuRouter.get("/tt",async(req,res)=>{
+    const {ordernum,user,menu_name,menu_price,image} =req.body;
+    console.log("넣어진듯?")
+    UserHistory.create({ordernum,user,menu_name,menu_price,image});
+    res.send({mss:"dddddd"})
+  })
+  

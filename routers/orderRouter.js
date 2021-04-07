@@ -7,6 +7,10 @@ const { Mymenu } = require("../schemas/Mymenu");
 const { UserHistory } = require("../schemas/UserHistory");
 const { User } = require("../schemas/User");
 
+// 주문하기 > 결제페이지
+orderRouter.post("/",async(req,res)=>{
+    const{user,}= req.body;
+});
 
 
 module.exports = {
