@@ -13,11 +13,16 @@ orderRouter.post("/", async (req, res) => {
   const { menuId, size, cup_option, num } = req.body;
   try {
     const [user, menu] = await Promise.all([
-      User.findOne({ id: userId }),
+      User.findOneAndUpdate(
+        { id: userId },
+        { $inc: { star: 1 } },
+        { new: true }
+      ),
       Menu.findById(menuId),
     ]);
     const newHistory = new UserHistory({ user, menu, size, cup_option, num });
     await newHistory.save();
+
     return res.send({ result: "success" });
   } catch (err) {
     console.log(err);
