@@ -6,7 +6,7 @@ const { Menu } = require("../schemas/Menu");
 const { Mymenu } = require("../schemas/Mymenu");
 const { UserHistory } = require("../schemas/UserHistory");
 const { User } = require("../schemas/User");
-
+const authMiddleware = require("../middlewares/auth-middleware");
 
 //회원가입, 서버에서 비밀번호 - 비밀번호 확인까지 해주는 버전
 userRouter.post("/register", async (req, res) => {
@@ -49,6 +49,17 @@ userRouter.post("/login", async (req, res) => {
   }
 });
 
+// 메인페이지에서 유저정보 뿌려주기
+// 프론트단에서는 if문으로 토큰이 있으면 이 함수를 실행 없으면 실행X
+userRouter.get("/user_info", authMiddleware, async (req, res) => {
+  const userId = res.locals.user;
+  try {
+    const user = await User.findOne({ id: userId });
+    res.send({ result: { user: user } });
+  } catch (err) {
+    return res.send(400).send({ err: err.message });
+  }
+});
 module.exports = {
   userRouter,
 };
