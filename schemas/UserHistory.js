@@ -4,12 +4,12 @@ const UserHistorySchema = new Schema({
   user: {
     type: Types.ObjectId,
     required: true,
-    ref: "User",
+    ref: "user",
   },
   menu: {
     type: Types.ObjectId,
     required: true,
-    ref: "Menu",
+    ref: "menu",
   },
   date: {
     type: Date,
