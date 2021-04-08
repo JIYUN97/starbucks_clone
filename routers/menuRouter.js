@@ -70,6 +70,8 @@ menuRouter.get("/popular_menu", async (req, res) => {
       .populate([{ path: "menu" }])
       .sort("-date")
       .limit(5);
+
+    console.log(recent_history);
     let popular_menu = [];
     recent_history.forEach(function (e) {
       popular_menu.push(e.menu);
@@ -92,7 +94,7 @@ menuRouter.post("/mymenu", authMiddleware, async (req, res) => {
     ]);
 
     // console.log(user['_id'], menu['_id']);
-    // console.log(user, menu, size, cup_option);
+    // console.log(userId, menu, size, cup_option);
     Mymenu.create({ user, menu, size, cup_option });
     return res.send({ result: "나만의 메뉴 저장에 성공했습니다!" });
   } catch (err) {
@@ -104,10 +106,14 @@ menuRouter.post("/mymenu", authMiddleware, async (req, res) => {
 // 아직 공사중
 menuRouter.get("/mymenu", authMiddleware, async (req, res) => {
   const userId = res.locals.user;
+  console.log(userId);
   try {
-    const user = User.findOne({ id: userId });
-    console(user);
-    return res.send({ result: "나만의 메뉴 불러오기에 성공했습니다!" });
+
+    user = User.findOne({id:userId});
+    console.log(user);
+
+    return res.status(200).send({ mss: "출력완료!" });
+    // return res.send({ user, menu, size, cup_option });
   } catch (err) {
     return res.status(400).send({ err: "나만의 메뉴 불러오기에 실패했습니다." });
   }
