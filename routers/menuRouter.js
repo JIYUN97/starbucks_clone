@@ -6,6 +6,7 @@ const { Menu } = require("../schemas/Menu");
 const { Mymenu } = require("../schemas/Mymenu");
 const { UserHistory } = require("../schemas/UserHistory");
 const { User } = require("../schemas/User");
+const authMiddleware = require("../middlewares/auth-middleware");
 
 //전체메뉴에서 음료 api
 menuRouter.get("/drink", async (req, res) => {
@@ -65,15 +66,52 @@ menuRouter.get("/new_menu", async (req, res) => {
 // 인기메뉴
 menuRouter.get("/popular_menu", async (req, res) => {
   try {
-    let popular_menu = await UserHistory.find({})
+    let recent_history = await UserHistory.find({})
       .populate([{ path: "menu" }])
       .sort("-date")
       .limit(5);
+    let popular_menu = [];
+    recent_history.forEach(function (e) {
+      popular_menu.push(e.menu);
+    });
     res.send({ result: popular_menu });
   } catch (error) {
     res.status(400).send({ err: err.message });
   }
 });
+
+//나만의 메뉴
+menuRouter.post("/mymenu", authMiddleware, async (req, res) => {
+  const userId = res.locals.user;
+  const { menuId, size, cup_option } = req.body;
+  // console.log(userId, menuId, size, cup_option);
+  try {
+    const [user, menu] = await Promise.all([
+      User.findOne({ id: userId }),
+      Menu.findById(menuId),
+    ]);
+
+    // console.log(user['_id'], menu['_id']);
+    // console.log(user, menu, size, cup_option);
+    Mymenu.create({ user, menu, size, cup_option });
+    return res.send({ result: "나만의 메뉴 저장에 성공했습니다!" });
+  } catch (err) {
+    return res.status(400).send({ err: "나만의 메뉴 저장에 실패했습니다." });
+  }
+})
+
+//나만의 메뉴
+// 아직 공사중
+menuRouter.get("/mymenu", authMiddleware, async (req, res) => {
+  const userId = res.locals.user;
+  try {
+    const user = User.findOne({ id: userId });
+    console(user);
+    return res.send({ result: "나만의 메뉴 불러오기에 성공했습니다!" });
+  } catch (err) {
+    return res.status(400).send({ err: "나만의 메뉴 불러오기에 실패했습니다." });
+  }
+})
 
 module.exports = {
   menuRouter,
