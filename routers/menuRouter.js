@@ -46,13 +46,6 @@ menuRouter.get("/drink/:menuId", async (req, res) => {
   }
 });
 
-//지금 카테고리를 따로 나눠야 할 것 같아서 post 요청 보낼려고 임시로 만든 Router
-menuRouter.post("/", async (req, res) => {
-  const category = new Category({ ...req.body });
-  await category.save();
-  res.send("성공");
-});
-
 //새로나온 메뉴
 menuRouter.get("/new_menu", async (req, res) => {
   try {
@@ -67,18 +60,13 @@ menuRouter.get("/new_menu", async (req, res) => {
 // 인기메뉴
 menuRouter.get("/popular_menu", async (req, res) => {
   try {
-    let recent_history = await UserHistory.find({})
-      .populate([{ path: "menu" }])
+    let popular_menu = await UserHistory.find({})
+      .populate("menu", "name image")
       .sort("-date")
+      .select("menu")
       .limit(5);
-
-    console.log(recent_history);
-    let popular_menu = [];
-    recent_history.forEach(function (e) {
-      popular_menu.push(e.menu);
-    });
     res.send({ result: popular_menu });
-  } catch (error) {
+  } catch (err) {
     res.status(400).send({ err: err.message });
   }
 });
@@ -86,16 +74,14 @@ menuRouter.get("/popular_menu", async (req, res) => {
 //나만의 메뉴
 menuRouter.post("/mymenu", authMiddleware, async (req, res) => {
   const userId = res.locals.user;
-  const { menuId, size, cup_option,price } = req.body;
-  // console.log(userId, menuId, size, cup_option);
+  const { menuId, size, cup_option } = req.body;
+
   try {
     const [user, menu] = await Promise.all([
       User.findOne({ id: userId }),
       Menu.findById(menuId),
     ]);
 
-    // console.log(user['_id'], menu['_id']);
-    // console.log(userId, menu, size, cup_option);
     Mymenu.create({ user, menu, size, cup_option });
     return res.send({ result: "나만의 메뉴 저장에 성공했습니다!" });
   } catch (err) {
@@ -104,32 +90,16 @@ menuRouter.post("/mymenu", authMiddleware, async (req, res) => {
 });
 
 //나만의 메뉴
-// 아직 공사중
 menuRouter.get("/mymenu", authMiddleware, async (req, res) => {
   const userId = res.locals.user;
-  // console.log(userId,typeof(userId));
+
   try {
+    const user = await User.findOne({ id: userId });
+    const mymenu = await Mymenu.find({ user })
+      .populate("menu", "name eng_name ice hot image price")
+      .select("menu size cup_option");
 
-    user = await User.findOne({id:userId});
-    userid = user['_id']
-    mymy = await Mymenu.find({user:userid});
-    mymenu = [];
-    // 이거 컬럼하나씩 뽑아주는거 못하나..
-    for(let i=0; i<mymy.length; i++){
-      menuId = mymy[i]["menu"];
-      menu = await Menu.findOne({_id:menuId});
-      eng_name=menu["eng_name"];
-      name=menu["name"];
-      image=menu["image"];
-      size = mymy[i]["size"];
-      cup_option = mymy[i]["cup_option"];
-      
-      mymenu[i] = {eng_name,name,image,size,cup_option};
-    }
-    console.log(mymenu)
-
-    return res.status(200).send({result:mymenu});
-    // return res.send({ user, menu, size, cup_option });
+    return res.status(200).send({ result: mymenu });
   } catch (err) {
     return res
       .status(400)

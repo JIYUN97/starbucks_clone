@@ -13,10 +13,6 @@ const MenuSchema = new Schema({
     type: String,
     required: true,
   },
-  eng_name: {
-    type: String,
-    required: true,
-  },
   name: {
     type: String,
     required: true,
