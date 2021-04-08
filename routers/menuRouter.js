@@ -86,7 +86,7 @@ menuRouter.get("/popular_menu", async (req, res) => {
 //나만의 메뉴
 menuRouter.post("/mymenu", authMiddleware, async (req, res) => {
   const userId = res.locals.user;
-  const { menuId, size, cup_option } = req.body;
+  const { menuId, size, cup_option,price } = req.body;
   // console.log(userId, menuId, size, cup_option);
   try {
     const [user, menu] = await Promise.all([
@@ -107,13 +107,28 @@ menuRouter.post("/mymenu", authMiddleware, async (req, res) => {
 // 아직 공사중
 menuRouter.get("/mymenu", authMiddleware, async (req, res) => {
   const userId = res.locals.user;
-  console.log(userId);
+  // console.log(userId,typeof(userId));
   try {
 
-    user = User.findOne({id:userId});
-    console.log(user);
+    user = await User.findOne({id:userId});
+    userid = user['_id']
+    mymy = await Mymenu.find({user:userid});
+    mymenu = [];
+    // 이거 컬럼하나씩 뽑아주는거 못하나..
+    for(let i=0; i<mymy.length; i++){
+      menuId = mymy[i]["menu"];
+      menu = await Menu.findOne({_id:menuId});
+      eng_name=menu["eng_name"];
+      name=menu["name"];
+      image=menu["image"];
+      size = mymy[i]["size"];
+      cup_option = mymy[i]["cup_option"];
+      
+      mymenu[i] = {eng_name,name,image,size,cup_option};
+    }
+    console.log(mymenu)
 
-    return res.status(200).send({ mss: "출력완료!" });
+    return res.status(200).send({result:mymenu});
     // return res.send({ user, menu, size, cup_option });
   } catch (err) {
     return res
