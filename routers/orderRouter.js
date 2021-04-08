@@ -30,6 +30,7 @@ orderRouter.post("/", async (req, res) => {
   }
 });
 
+//히스토리 주문내역
 orderRouter.get("/", async (req, res) => {
   try {
     const userId = res.locals.user;
