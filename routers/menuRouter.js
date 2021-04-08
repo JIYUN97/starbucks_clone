@@ -7,6 +7,7 @@ const { Mymenu } = require("../schemas/Mymenu");
 const { UserHistory } = require("../schemas/UserHistory");
 const { User } = require("../schemas/User");
 const authMiddleware = require("../middlewares/auth-middleware");
+const { Cart } = require("../schemas/Cart");
 
 //전체메뉴에서 음료 api
 menuRouter.get("/drink", async (req, res) => {
@@ -100,7 +101,7 @@ menuRouter.post("/mymenu", authMiddleware, async (req, res) => {
   } catch (err) {
     return res.status(400).send({ err: "나만의 메뉴 저장에 실패했습니다." });
   }
-})
+});
 
 //나만의 메뉴
 // 아직 공사중
@@ -115,10 +116,46 @@ menuRouter.get("/mymenu", authMiddleware, async (req, res) => {
     return res.status(200).send({ mss: "출력완료!" });
     // return res.send({ user, menu, size, cup_option });
   } catch (err) {
-    return res.status(400).send({ err: "나만의 메뉴 불러오기에 실패했습니다." });
+    return res
+      .status(400)
+      .send({ err: "나만의 메뉴 불러오기에 실패했습니다." });
   }
-})
+});
 
+//카트 넣기
+menuRouter.post("/:menuId/cart", authMiddleware, async (req, res) => {
+  const userId = res.locals.user;
+  const { menuId } = req.params;
+  try {
+    const menu = await Menu.findOne({ _id: menuId });
+    const isCart = await Cart.findOne().and([{ userId }, { menu }]);
+    if (!isCart) {
+      const newCart = new Cart({ userId, menu, ...req.body });
+      await newCart.save();
+      return res.send({ result: "success" });
+    }
+    await Cart.findOneAndUpdate(
+      { userId, menu },
+      { $set: { num: req.body.num } }
+    );
+    return res.send({ result: "success" });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send({ err: err.message });
+  }
+});
+
+//카트 목록 불러오기
+menuRouter.get("/cart", authMiddleware, async (req, res) => {
+  const userId = res.locals.user;
+  try {
+    const carts = await Cart.find({ userId }).populate({ path: "menu" });
+    return res.send({ result: carts });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send({ err: err.message });
+  }
+});
 module.exports = {
   menuRouter,
 };
