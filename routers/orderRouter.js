@@ -30,6 +30,24 @@ orderRouter.post("/", async (req, res) => {
   }
 });
 
+orderRouter.get("/", async (req, res) => {
+  try {
+    const userId = res.locals.user;
+    const user = await User.find({ id: userId });
+    if (!user)
+      return res
+        .status(400)
+        .send({ err: "해당 유저 정보가 존재하지 않습니다." });
+    const orderList = await UserHistory.find({ user: user })
+      .sort("-date")
+      .populate({ path: "menu" });
+    return res.send({ result: orderList });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send({ err: err.message });
+  }
+});
+
 module.exports = {
   orderRouter,
 };
