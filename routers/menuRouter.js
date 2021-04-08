@@ -138,6 +138,18 @@ menuRouter.post("/:menuId/cart", authMiddleware, async (req, res) => {
     return res.status(400).send({ err: err.message });
   }
 });
+
+//카트 목록 불러오기
+menuRouter.get("/cart", authMiddleware, async (req, res) => {
+  const userId = res.locals.user;
+  try {
+    const carts = await Cart.find({ userId }).populate({ path: "menu" });
+    return res.send({ result: carts });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send({ err: err.message });
+  }
+});
 module.exports = {
   menuRouter,
 };
