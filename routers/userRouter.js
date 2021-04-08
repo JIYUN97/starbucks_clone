@@ -1,10 +1,6 @@
 const express = require("express");
 const userRouter = express.Router();
 const jwt = require("jsonwebtoken");
-const { Category } = require("../schemas/Category");
-const { Menu } = require("../schemas/Menu");
-const { Mymenu } = require("../schemas/Mymenu");
-const { UserHistory } = require("../schemas/UserHistory");
 const { User } = require("../schemas/User");
 const authMiddleware = require("../middlewares/auth-middleware");
 
