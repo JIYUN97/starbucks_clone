@@ -1,12 +1,12 @@
 const express = require("express");
 const app = express();
 const port = 3000;
-const cors = require("cors");
 const mongoose = require("mongoose");
 const { menuRouter } = require("./routers/menuRouter");
 const { userRouter } = require("./routers/userRouter");
 const { orderRouter } = require("./routers/orderRouter");
 const authMiddleware = require("./middlewares/auth-middleware");
+require("dotenv").config();
 
 const server = async () => {
   try {
@@ -16,11 +16,10 @@ const server = async () => {
       useCreateIndex: true,
       ignoreUndefined: true,
       useFindAndModify: false,
-      // user: "test",
-      // pass: "test",
+      // user: process.env.USER,
+      // pass: process.env.PASSWORD,
     });
 
-    app.use(cors()); //cors를 위한 미들웨어
     app.use(express.json());
     app.use("/menu", authMiddleware, [menuRouter]);
     app.use("/user", [userRouter]);
