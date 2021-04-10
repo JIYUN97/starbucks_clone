@@ -1,11 +1,13 @@
 const express = require("express");
 const menuRouter = express.Router();
-const { Category } = require("../schemas/Category");
-const { Menu } = require("../schemas/Menu");
-const { Mymenu } = require("../schemas/Mymenu");
-const { UserHistory } = require("../schemas/UserHistory");
-const { User } = require("../schemas/User");
-const { Cart } = require("../schemas/Cart");
+const {
+  Category,
+  Menu,
+  Mymenu,
+  UserHistory,
+  User,
+  Cart,
+} = require("../schemas");
 const authMiddleware = require("../middlewares/auth-middleware");
 
 //전체메뉴에서 음료 api
