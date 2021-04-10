@@ -2,9 +2,7 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const mongoose = require("mongoose");
-const { menuRouter } = require("./routers/menuRouter");
-const { userRouter } = require("./routers/userRouter");
-const { orderRouter } = require("./routers/orderRouter");
+const { menuRouter, userRouter, orderRouter } = require("./routers");
 const authMiddleware = require("./middlewares/auth-middleware");
 require("dotenv").config();
 
