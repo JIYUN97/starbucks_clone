@@ -1,8 +1,9 @@
 const express = require("express");
 const userRouter = express.Router();
-const jwt = require("jsonwebtoken");
 const { User } = require("../schemas/User");
+const jwt = require("jsonwebtoken");
 const authMiddleware = require("../middlewares/auth-middleware");
+require("dotenv").config();
 
 //회원가입, 서버에서 비밀번호 - 비밀번호 확인까지 해주는 버전
 userRouter.post("/register", async (req, res) => {
@@ -37,7 +38,7 @@ userRouter.post("/login", async (req, res) => {
         .status(400)
         .send({ err: "아이디 또는 패스워드가 잘못됐습니다." });
     }
-    const token = jwt.sign({ userId: user.id }, "starbucks_clone_key");
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRETKEY);
     return res.send({ result: { user: { token: token } } });
   } catch (err) {
     console.log(err);

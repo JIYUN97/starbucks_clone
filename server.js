@@ -22,7 +22,7 @@ const server = async () => {
 
     app.use(cors()); //cors를 위한 미들웨어
     app.use(express.json());
-    app.use("/menu", [menuRouter]);
+    app.use("/menu", authMiddleware, [menuRouter]);
     app.use("/user", [userRouter]);
     app.use("/order", authMiddleware, [orderRouter]);
 
