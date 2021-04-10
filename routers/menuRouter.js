@@ -1,13 +1,12 @@
 const express = require("express");
 const menuRouter = express.Router();
-const jwt = require("jsonwebtoken");
 const { Category } = require("../schemas/Category");
 const { Menu } = require("../schemas/Menu");
 const { Mymenu } = require("../schemas/Mymenu");
 const { UserHistory } = require("../schemas/UserHistory");
 const { User } = require("../schemas/User");
-const authMiddleware = require("../middlewares/auth-middleware");
 const { Cart } = require("../schemas/Cart");
+const authMiddleware = require("../middlewares/auth-middleware");
 
 //전체메뉴에서 음료 api
 menuRouter.get("/drink", async (req, res) => {
@@ -65,6 +64,7 @@ menuRouter.get("/popular_menu", async (req, res) => {
       .sort("-date")
       .select("menu")
       .limit(5);
+
     res.send({ result: popular_menu });
   } catch (err) {
     res.status(400).send({ err: err.message });
