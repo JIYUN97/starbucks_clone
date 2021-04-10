@@ -6,7 +6,6 @@ const { Mymenu } = require("../schemas/Mymenu");
 const { UserHistory } = require("../schemas/UserHistory");
 const { User } = require("../schemas/User");
 const { Cart } = require("../schemas/Cart");
-const jwt = require("jsonwebtoken");
 const authMiddleware = require("../middlewares/auth-middleware");
 
 //전체메뉴에서 음료 api

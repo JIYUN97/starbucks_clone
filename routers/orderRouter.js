@@ -1,6 +1,5 @@
 const express = require("express");
 const orderRouter = express.Router();
-const jwt = require("jsonwebtoken");
 const { Menu } = require("../schemas/Menu");
 const { UserHistory } = require("../schemas/UserHistory");
 const { User } = require("../schemas/User");
