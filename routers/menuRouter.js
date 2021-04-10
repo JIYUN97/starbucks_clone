@@ -143,6 +143,7 @@ menuRouter.get("/cart", authMiddleware, async (req, res) => {
     return res.status(400).send({ err: err.message });
   }
 });
+
 module.exports = {
   menuRouter,
 };
